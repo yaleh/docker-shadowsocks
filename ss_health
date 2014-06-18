@@ -1,0 +1,71 @@
+#!/usr/bin/python
+
+import argparse
+
+from sh import curl, penctl, ErrorReturnCode
+
+def check_socks(server, port, link, maxtime):
+    try:
+        output = curl('--socks5-hostname', "%s:%s" % (server, port),
+                      '-m', maxtime,
+                      link)
+        return True
+    except ErrorReturnCode:
+        return False
+
+def get_servers(control_port):
+    try:
+        output = penctl(control_port, 'servers')
+    except ErrorReturnCode:
+        return None
+    array_list = filter((lambda x: len(x)>1 and x[2] != u'0.0.0.0'), [line.split(" ") for line in output.split("\n")])
+    servers = []
+    for l in array_list:
+        servers.append({'id':l[0], 'addr':l[2], 'port':l[4]})
+    return servers
+
+if __name__ == '__main__':
+    parser=argparse.ArgumentParser(description="Check SOCKS proxy health and update pen parameters")
+    parser.add_argument('-c', '--control',
+                        dest = 'control',
+                        default = '127.0.0.1:1990',
+                        help = "Control port of the pen server")
+    parser.add_argument('-l', '--link',
+                        dest = 'link',
+                        default = 'http://twitter.com',
+                        help = 'HTTP/HTTPS link to fetch for testing.')
+    parser.add_argument('-m', '--max-time',
+                        dest = 'maxtime',
+                        type = int,
+                        default = 5,
+                        help = 'Maximum  time  in  seconds that you allow the whole operation to take.')
+    parser.add_argument('-b', '--blacklist',
+                        dest = 'blacklist',
+                        default = '300',
+                        help = 'Duration in seconds to blacklist the failed SOCKS server.')
+    # parser.add_argument('-s', '--status-file',
+    #                     dest = 'statusfile',
+    #                     default = '/usr/share/nginx/html/pen.html',
+    #                     help = 'Status HTML page to update for pen states.')
+
+    args = parser.parse_args()
+
+    # print args.socksproxy
+    # print args.maxtime
+    # print args.link
+    # print args.blacklist
+
+    # for socks_server in penctl servers
+    #     if check_socks(socks_server) failed:
+    #         blacklist(socks_server)
+
+    servers = get_servers(args.control)
+    for s in servers:
+        print s
+        if not check_socks(s['addr'], s['port'], args.link, args.maxtime):
+            print "Failed. Try to block server %s for %s secs" % \
+                (s['id'], args.blacklist)
+            penctl(args.control, 'server', s['id'], 'blacklist', args.blacklist)
+
+#    servers_str = penctl(args.control, 'servers')
+#    print servers_str
