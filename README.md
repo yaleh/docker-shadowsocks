@@ -12,13 +12,13 @@ It's required to build customize supervisord.conf and mount the folder of the su
 
 Ports to map
 
-* 22: SSH
-* 1989: balanced SOCK5 proxy
-* 1990: Pen control
+* **22**: SSH
+* **1989**: balanced SOCK5 proxy
+* **1990**: Pen control
 
 Volumes to mount
 
-* /usr/share/nginx/html: folder to save pen status HTML
-* /etc/supervisor/conf.d: folder for supervisord.conf
+* **/usr/share/nginx/html**: folder to save pen status HTML
+* **/etc/supervisor/conf.d**: folder for supervisord.conf
 
 For more command line options, refer to the [shadowsocks documentation](https://github.com/clowwindy/shadowsocks)
