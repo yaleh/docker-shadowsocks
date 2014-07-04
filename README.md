@@ -6,7 +6,7 @@ This Dockerfile builds an image with the Python implementation of [shadowsocks](
 Quick Start
 -----------
 
-It's required to build customize supervisord.conf and mount the folder of the supoervisord.conf file as a volume. 
+It's required to customize supervisord.conf with your server settings and mount the folder of supoervisord.conf file as a volume. The default supervisor.conf are delivered with 3 server configurations, you may need to delete some or add more. Notice: you will need to change the parameters of pen according to shadowsocks settings also. 
 
     docker run -p 1990:1990 -p 2222:22 -p 1989:1989 -p 8000:80 --name ss -v $PWD:/usr/share/nginx/html -v $PWD:/etc/supervisor/conf.d -d -i yaleh/docker-shadowsocks
 
