@@ -13,6 +13,7 @@ It's required to customize supervisord.conf with your server settings and mount 
 Ports to map
 
 * **22**: SSH
+* **80**: Web server for pen status, pen status is available at http://HOST:PORT/pen.html
 * **1989**: balanced SOCK5 proxy
 * **1990**: Pen control
 
