@@ -3,7 +3,7 @@
 # VERSION 0.0.1
 
 FROM ubuntu:14.04
-MAINTAINER Dariel Dato-on <oddrationale@gmail.com>
+MAINTAINER Yale Huang <yale.huang@trantect.com>
 
 RUN apt-get update && \
     apt-get install -y python-pip python-gevent python-m2crypto supervisor \
